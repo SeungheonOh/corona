@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # by Seungheon Oh 2020
 
-[ $1 == "help" ] && echo "$(basename $0) [county] [state]" && exit 0
+[ -z "$1" ] && echo "$(basename $0) [county] [state]" && exit 0
 
 data=https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv
 amount=5
@@ -10,5 +10,5 @@ state=$2
 categories=1,2,3,5,6
 
 curl -s $data | 
-  tee >(sed -n "/$county,$state/p" | tail -n $amount | cut -d',' -f$categories) >(sed -n "1p"| cut -d',' -f$categories) > /dev/null | sed -e "s/,/ /g" | column -t
+  tee >(sed -n "/$county,$state/p" | tail -n $amount | cut -d',' -f$categories) >(sed -n "1p"| cut -d',' -f$categories) > /dev/null | sed -e "s/ /_/g" | sed -e "s/,/ /g" | column -t
 
